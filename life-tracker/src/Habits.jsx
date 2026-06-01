@@ -21,6 +21,7 @@ export default function Habits() {
       tab: activetab
      
     }
+    
     setHabits([...habits, newHabit])
     setHabitName("")
     setHabitTime("")
@@ -29,11 +30,11 @@ export default function Habits() {
   }
 
   const filterhabit = habits
-  .filter(habit=>habit.frequency===activefilter
-    .filter(habit=>habit.freq===activefilter)
+  .filter(habit=>habit.frequency===activefilter)
+    .filter(habit=>habit.tab===activetab)
+    
 
-  )
-
+  
   return (
     <>
       <div>
@@ -45,6 +46,7 @@ export default function Habits() {
         </div>
         <div className='flex justify-evenly mt-4 items-center'>
           <div className=' flex gap-4' >
+       
             <button onClick={()=>setactivefilter("daily")} className=' border-2 border-transparent rounded-xl px-3 py-0.5 bg-blue-300 hover:bg-green-600'>Daily</button>
             <button onClick={()=>setactivefilter("weekly")} className=' border-2 border-transparent rounded-xl px-3 py-0.5 bg-blue-300 hover:bg-green-600'>Weekly</button>
             <button onClick={()=>setactivefilter("monthly")} className=' border-2 border-transparent rounded-xl px-3 py-1.5 bg-blue-300 hover:bg-green-600'>Monthly</button>
@@ -66,7 +68,7 @@ export default function Habits() {
           
           <div className='flex flex-col gap-2 justify-around items-center'>
             <h3 className='text-2xl font-bold text-gray-300'>Frequency</h3>
-            <select name="" id="" value={habitFrequency} onChange={(e) => setHabitFrequency(e.target.value)} className='border-2 border-gray-300 rounded-lg py-1 w-full flex justify-between px-35 bg-blue-300'>
+            <select value={habitFrequency} onChange={(e) => setHabitFrequency(e.target.value)} className='border-2 border-gray-300 rounded-lg py-1 w-full flex justify-between px-35 bg-blue-300'>
               <option value="daily">Daily</option>
               <option value="weekly">Weekly</option>
               <option value="monthly">Monthly</option>
