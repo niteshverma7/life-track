@@ -30,8 +30,7 @@ export default function Header() {
            onChange={(e)=>setdate(e.target.value)}
             hidden
           
-          
-          
+
           />
       
          </div>
