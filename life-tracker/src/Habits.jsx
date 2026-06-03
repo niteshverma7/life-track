@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import { Ellipsis } from 'lucide-react';
+import { Ellipsis, X } from 'lucide-react';
 
 
 export default function Habits() {
@@ -9,8 +9,24 @@ export default function Habits() {
   const [habitName, setHabitName] = useState("");
   const [habitTime, setHabitTime] = useState("");
   const [habitFrequency, setHabitFrequency] = useState("daily");
-  const [activefilter, setactivefilter] = useState("daily")
-  const [activetab, setactivetab] = useState("habit")
+  const [activefilter, setactivefilter] = useState("daily");
+   const [openHabitId, setOpenHabitId] = useState(null);
+
+
+    const handelDelete = (id) => {
+       setHabits(habits.filter(habit => habit.id !== id));
+    };
+
+    const handleEdit = (id) => {
+      const habitToEdit = habits.find(habit => habit.id === id);
+      if (habitToEdit) {
+        setHabitName(habitToEdit.name);
+        setHabitTime(habitToEdit.time);
+        setHabitFrequency(habitToEdit.frequency);
+        setShowForm(true);
+        
+      }
+    };
 
   const handleAdd = () => {
     if (habitName.trim() === "") return
@@ -18,11 +34,10 @@ export default function Habits() {
       id: Date.now(),
       name: habitName,
       time: habitTime,
-      frequency: habitFrequency,
-      tab: activetab
+      frequency: habitFrequency
 
     }
-
+   
     setHabits([...habits, newHabit])
     setHabitName("")
     setHabitTime("")
@@ -30,19 +45,15 @@ export default function Habits() {
     setShowForm(false)
   }
 
+
+
   const filterhabit = habits
     .filter(habit => habit.frequency === activefilter)
-    .filter(habit => habit.tab === activetab)
-
+    
+ 
   return (
     <>
-      <div>
-        <div className='flex justify-center items-center'>
-          <div className="flex justify-center  content-center mt-4 gap-3 text-xl text-gray-300 border-2 border-transparent bg-blue-800 px-4 rounded-lg">
-            <button onClick={() => setactivetab("habit")} className="bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-30 rounded">Add Habits</button>
-            <button onClick={() => setactivetab("finance")} className="bg-blue-500 hover:bg-red-700 text-white font-bold py-2 px-30 rounded">finance</button>
-          </div>
-        </div>
+      
         <div className='flex justify-evenly mt-4 items-center'>
           <div className=' flex gap-4' >
 
@@ -52,7 +63,8 @@ export default function Habits() {
           </div>
           <button className=' border-2 border-transparent rounded-xl px-3 py-0.5 bg-blue-300 hover:bg-green-600' onClick={() => setShowForm(true)}>+Add Habit</button>
         </div>
-      </div>
+        
+      
 
       {showForm && (
 
@@ -94,7 +106,23 @@ export default function Habits() {
             <span>{habit.name}</span>
             <span>{habit.time}</span>
             <span>{habit.frequency}</span>
-            <span><Ellipsis /></span>
+             {/* desktop header */}
+         <div className=" flex items-center justify-end">
+       {openHabitId === habit.id ? <X onClick={() => setOpenHabitId(null)} /> : <Ellipsis onClick={() => setOpenHabitId(habit.id)} />}
+        </div>
+        {/* mobile icon */}
+        {openHabitId === habit.id && (
+         <div className="mt-4 space-y-2 flex items-end justify-end">
+          <ul className="flex flex-col space-y-2">
+            <li><button onClick={() => handleEdit(habit.id)} className='bg-green-500 text-white py-2 px-4 rounded'>Edit</button></li>
+            <li><button onClick={() => handelDelete(habit.id)} className='bg-green-500 text-white py-2 px-4 rounded'>Delete</button></li>
+          </ul>
+         </div>
+
+
+        )}
+            
+           
           </div>
           
 
