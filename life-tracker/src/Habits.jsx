@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import './Header.jsx'
 import './App.css';
 import { Ellipsis, X } from 'lucide-react';
+
 
 
 export default function Habits() {
@@ -10,35 +12,44 @@ export default function Habits() {
   const [habitTime, setHabitTime] = useState("");
   const [habitFrequency, setHabitFrequency] = useState("daily");
   const [activefilter, setactivefilter] = useState("daily");
-   const [openHabitId, setOpenHabitId] = useState(null);
-
+  const [openHabitId, setOpenHabitId] = useState(null);
+  const [handelEdit,sethandelEdit] = useState(null);
 
     const handelDelete = (id) => {
        setHabits(habits.filter(habit => habit.id !== id));
     };
 
-    const handleEdit = (id) => {
-      const habitToEdit = habits.find(habit => habit.id === id);
-      if (habitToEdit) {
-        setHabitName(habitToEdit.name);
-        setHabitTime(habitToEdit.time);
-        setHabitFrequency(habitToEdit.frequency);
+    const handleedit = (habit) => { 
+       setHabitName(habit.id)
+        setHabitName(habit.name);
+        setHabitTime(habit.time);
+        setHabitFrequency(habit.frequency);
         setShowForm(true);
+        setOpenHabitId(null);
         
-      }
     };
+
 
   const handleAdd = () => {
     if (habitName.trim() === "") return
-    const newHabit = {
+     if(handelEdit){
+     setHabits(habits.map(h =>
+      h.id ===handelEdit ?{...h,name:habitName ,time:habitTime,frequency:habitFrequency}
+      :h
+     ))
+     sethandelEdit(null)
+     } else{
+        const newHabit = {
       id: Date.now(),
       name: habitName,
       time: habitTime,
       frequency: habitFrequency
-
+     }
+      setHabits([...habits, newHabit])
     }
+    
    
-    setHabits([...habits, newHabit])
+   
     setHabitName("")
     setHabitTime("")
     setHabitFrequency("daily")
@@ -63,7 +74,9 @@ export default function Habits() {
           </div>
           <button className=' border-2 border-transparent rounded-xl px-3 py-0.5 bg-blue-300 hover:bg-green-600' onClick={() => setShowForm(true)}>+Add Habit</button>
         </div>
-        
+        <div>
+          
+        </div>
       
 
       {showForm && (
@@ -114,7 +127,7 @@ export default function Habits() {
         {openHabitId === habit.id && (
          <div className="mt-4 space-y-2 flex items-end justify-end">
           <ul className="flex flex-col space-y-2">
-            <li><button onClick={() => handleEdit(habit.id)} className='bg-green-500 text-white py-2 px-4 rounded'>Edit</button></li>
+            <li><button onClick={() => handleedit(habit.id)} className='bg-green-500 text-white py-2 px-4 rounded'>Edit</button></li>
             <li><button onClick={() => handelDelete(habit.id)} className='bg-green-500 text-white py-2 px-4 rounded'>Delete</button></li>
           </ul>
          </div>
